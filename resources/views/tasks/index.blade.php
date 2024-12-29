@@ -85,7 +85,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('tasks.edit', $task->id) }}"
                                             class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900">Edit</a>
-                                        <button
+                                        <button data-id="{{ $task->id }}"
                                             class="text-red-600 dark:text-red-400 hover:text-red-900 ml-4 deleteBtn">Delete</button>
                                     </td>
                                 </tr>
