@@ -19,9 +19,9 @@ class TaskServices
     public function getIndexData(array $validatedData)
     {
         $tasks = Task::with('project')
-            ->when(isset($validatedData['orderBy']), function ($query) use ($validatedData) {
+            ->when(isset($validatedData['order_by']), function ($query) use ($validatedData) {
                 $direction = $validatedData['direction'] ?? 'asc';
-                $query->orderBy($validatedData['orderBy'], $direction);
+                $query->orderBy($validatedData['order_by'], $direction);
             })
             ->when(isset($validatedData['project_id']), function ($query) use ($validatedData) {
                 $query->where('project_id', $validatedData['project_id']);
@@ -49,9 +49,10 @@ class TaskServices
 
     public function reorderTasks($validatedData){
         $order=$validatedData['order'];
+        // dd($order);
 
-        foreach($order as $key => $value){
-            Task::where('id', $value)->first()->update(['position' => $key+1]);//used first to fire the observer to later deal with paginated data or may be fire a custom event later
+        foreach($order as $item){
+            Task::where('id', $item['id'])->first()->update(['priority' => $item['position']]);//used first to fire the observer to later deal with paginated data or may be fire a custom event later
         }
         return true;
     }

@@ -25,7 +25,7 @@ class TaskIndexRequest extends FormRequest
             'project_id' => 'nullable|exists:projects,id',
             'order_by' => 'nullable|in:created_at,priority',
             'page_length' => 'nullable|in:10,20,50,100',
-            'direction' => 'nullable|in:asc,desc',
+            'direction' => 'nullable|in:ASC,DESC',
 
             //
         ];

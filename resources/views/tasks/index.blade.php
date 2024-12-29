@@ -86,6 +86,8 @@
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                         {{ $task->name }}
+                                        <br>
+                                        Id - {{$task->id}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                         {{ $task->priority }}
@@ -142,6 +144,7 @@
                 var direction = $(this).val();
                 var url = new URL(window.location.href);
                 url.searchParams.set('direction', direction);
+                console.log(url.toString())
                 window.location.href = url.toString();
             });
 
@@ -171,6 +174,11 @@
                         },
                         success: function(response) {
                             console.log(response);
+                            flasher.success(response.message);
+                        },
+                        error: function(response) {
+                            console.log(response);
+                            flasher.error(response.responseJSON.message);
                         }
                     });
                 }

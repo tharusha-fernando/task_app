@@ -19,6 +19,10 @@ class TaskOrderRule implements ValidationRule
         $taskIds = $value;
         $userId = Auth::id();
 
+        // dd(collect($taskIds)->pluck('id')->toArray());
+
+        $taskIds=collect($taskIds)->pluck('id')->toArray();
+
         // Check if all task IDs exist and are created by the authenticated user
         $tasks = Task::whereIn('id', $taskIds)->where('created_by', $userId)->get();
 
