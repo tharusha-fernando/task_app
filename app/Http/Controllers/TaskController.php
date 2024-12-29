@@ -8,7 +8,9 @@ use App\Http\Requests\TaskIndexRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Services\TaskServices;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate as FacadesGate;
 use Throwable;
 
 class TaskController extends Controller
@@ -87,6 +89,9 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        FacadesGate::authorize('update', $task);
+        $projects = Project::all();
+        return view('tasks.edit', compact('task', 'projects'));
         //
     }
 
@@ -95,6 +100,27 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        FacadesGate::authorize('update', $task);
+
+        $validatedData = $request->validated();
+        try {
+            $response = DB::transaction(function () use ($validatedData, $task) {
+                $this->taskService->updateTask( $validatedData , $task);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Task Updated Successfully',
+                ], 200);
+            });
+            return $response;
+        } catch (Throwable $th) {
+            // Handle exceptions
+            $error = config('app.debug') ? $th->getMessage() : 'Internal Server Error';
+
+            return response()->json([
+                'status' => 'error',
+                'error' => $error,
+            ], 500);
+        }
         //
     }
 

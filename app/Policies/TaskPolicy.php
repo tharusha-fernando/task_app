@@ -37,6 +37,9 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
+        if ($task->created_by == $user->id) {
+            return true;
+        }
         return false;
     }
 

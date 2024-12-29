@@ -42,4 +42,8 @@ class TaskServices
     public function storeTask($validatedData){
         return Task::create($validatedData);
     }
+
+    public function updateTask($validatedData, Task $task){
+        return $task->update($validatedData);
+    }
 }
