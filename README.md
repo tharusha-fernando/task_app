@@ -8,31 +8,37 @@ To set up the project, follow these steps:
     git clone <repository-url>
     ```
 
-2. Install PHP dependencies:
+2. Set the environment file:
+
+    ```sh
+    cp .env.example .env
+    ```
+
+3. Install PHP dependencies:
 
     ```sh
     composer install
     ```
 
-3. Install JavaScript dependencies:
+4. Install JavaScript dependencies:
 
     ```sh
     npm install
     ```
 
-4. Build the assets:
+5. Build the assets:
 
     ```sh
     npm run build
     ```
 
-5. Run database migrations:
+6. Run database migrations:
 
     ```sh
     php artisan migrate
     ```
 
-6. Seed the database:
+7. Seed the database:
     ```sh
     php artisan db:seed
     ```
