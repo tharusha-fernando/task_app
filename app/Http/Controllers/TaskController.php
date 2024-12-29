@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TaskIndexRequest;
+use App\Http\Requests\TaskReOrderRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Services\TaskServices;
@@ -137,6 +138,20 @@ class TaskController extends Controller
             $response = DB::transaction(function () use ($task) {
                 $task->delete();
                 return response()->json(['status' => 'success', 'message' => 'Task Deleted Successfully'], 200);
+            });
+            return $response;
+        } catch (Throwable $th) {
+            $error = config('app.debug') ? $th->getMessage() : 'Internal Server Error';
+            return response()->json(['status' => 'error', 'error' => $error], 500);
+        }
+    }
+
+    public function reorder(TaskReOrderRequest $request){
+        try {
+            $validatedData = $request->validated();
+            $response = DB::transaction(function () use ($validatedData) {
+                $this->taskService->reorderTasks($validatedData);
+                return response()->json(['status' => 'success', 'message' => 'Tasks Reordered Successfully'], 200);
             });
             return $response;
         } catch (Throwable $th) {

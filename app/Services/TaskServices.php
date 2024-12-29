@@ -46,4 +46,13 @@ class TaskServices
     public function updateTask($validatedData, Task $task){
         return $task->update($validatedData);
     }
+
+    public function reorderTasks($validatedData){
+        $order=$validatedData['order'];
+
+        foreach($order as $key => $value){
+            Task::where('id', $value)->first()->update(['position' => $key+1]);//used first to fire the observer to later deal with paginated data or may be fire a custom event later
+        }
+        return true;
+    }
 }
