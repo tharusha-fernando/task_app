@@ -27,12 +27,22 @@
 
                     <div class="mb-4">
                         <label class="inline-flex items-center">
-                            <input type="radio" class="form-radio" name="order" value="created_at" checked>
+                            <input type="radio" class="form-radio" name="order" value="created_at" {{ request('order_by') == 'created_at' ? 'checked' : '' }}>
                             <span class="ml-2">Order by Created At</span>
                         </label>
                         <label class="inline-flex items-center ml-6">
-                            <input type="radio" class="form-radio" name="order" value="priority">
+                            <input type="radio" class="form-radio" name="order" value="priority" {{ request('order_by') == 'priority' ? 'checked' : '' }}>
                             <span class="ml-2">Order by Priority</span>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" class="form-radio" name="direction" value="ASC" {{ request('direction') == 'ASC' ? 'checked' : '' }}>
+                            <span class="ml-2">Ascending</span>
+                        </label>
+                        <label class="inline-flex items-center ml-6">
+                            <input type="radio" class="form-radio" name="direction" value="DESC" {{ request('direction') == 'DESC' ? 'checked' : '' }}>
+                            <span class="ml-2">Descending</span>
                         </label>
                     </div>
 
@@ -41,10 +51,10 @@
                             Length</label>
                         <select id="page-length" name="page-length"
                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
+                            <option value="10" {{ request('page_length') == 10 ? 'selected' : '' }}>10</option>
+                            <option value="20" {{ request('page_length') == 20 ? 'selected' : '' }}>20</option>
+                            <option value="50" {{ request('page_length') == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('page_length') == 100 ? 'selected' : '' }}>100</option>
                         </select>
                     </div>
                     <div class="mb-4">
@@ -94,7 +104,7 @@
                             @endforeach
                         </tbody>
                     </table>
-
+                    {{ $tasks->links() }}
                     <div class="mt-4">
                         <!-- Pagination links -->
                     </div>
@@ -126,6 +136,13 @@
                 var orderBy = $(this).val();
                 var url = new URL(window.location.href);
                 url.searchParams.set('order_by', orderBy);
+                window.location.href = url.toString();
+            });
+
+            $('input[name="direction"]').change(function() {
+                var direction = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('direction', direction);
                 window.location.href = url.toString();
             });
 
