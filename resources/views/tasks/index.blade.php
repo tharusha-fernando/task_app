@@ -22,7 +22,6 @@
                                 </option>
                             @endforeach
                         </select>
-
                     </div>
 
                     <div class="mb-4">
@@ -80,10 +79,10 @@
                                     Action</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody id="sortable" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700" >
                             <!-- Render tasks dynamically -->
                             @foreach ($tasks as $task)
-                                <tr>
+                                <tr data-id="{{ $task->id }}">
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                         {{ $task->name }}
@@ -113,17 +112,17 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    
 
     <script>
         $(document).ready(function() {
-
-
+            
             $(document).on("click", ".deleteBtn", function() {
                 var id = $(this).data('id');
                 var url = '{{ route('tasks.destroy', ['task' => '__id']) }}'.replace('__id', id);
                 destroyData(url, null, true);
             });
-
 
             $('#project-filter').on('change', function() {
                 var projectId = $(this).val();
@@ -152,6 +151,30 @@
                 url.searchParams.set('page_length', pageLength);
                 window.location.href = url.toString();
             });
+
+            $("#sortable").sortable({
+                update: function(event, ui) {
+                    var order = [];
+                    $('#sortable tr').each(function(index, element) {
+                        order.push({
+                            id: $(element).data('id'),
+                            position: index + 1
+                        });
+                    });
+
+                    $.ajax({
+                        url: '{{ route('tasks.reorder') }}',
+                        method: 'POST',
+                        data: {
+                            order: order,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log(response);
+                        }
+                    });
+                }
+            }).disableSelection();
         });
     </script>
 </x-app-layout>
