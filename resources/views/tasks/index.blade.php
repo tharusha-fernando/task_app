@@ -100,4 +100,19 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+
+            $(document).on("click", ".deleteBtn", function() {
+                var id = $(this).data('id');
+                var url = '{{ route('tasks.destroy', ['task' => '__id']) }}'.replace('__id', id);
+                destroyData(url, null, true);
+            });
+
+
+        });
+    </script>
 </x-app-layout>

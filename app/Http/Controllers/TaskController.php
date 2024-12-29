@@ -105,7 +105,7 @@ class TaskController extends Controller
         $validatedData = $request->validated();
         try {
             $response = DB::transaction(function () use ($validatedData, $task) {
-                $this->taskService->updateTask( $validatedData , $task);
+                $this->taskService->updateTask($validatedData, $task);
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Task Updated Successfully',
@@ -127,8 +127,22 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(Task $task)
+    // {
+
+    //     //
     public function destroy(Task $task)
     {
-        //
+        try {
+            $response = DB::transaction(function () use ($task) {
+                $task->delete();
+                return response()->json(['status' => 'success', 'message' => 'Task Deleted Successfully'], 200);
+            });
+            return $response;
+        } catch (Throwable $th) {
+            $error = config('app.debug') ? $th->getMessage() : 'Internal Server Error';
+            return response()->json(['status' => 'error', 'error' => $error], 500);
+        }
     }
+    // }
 }
