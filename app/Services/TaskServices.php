@@ -23,8 +23,8 @@ class TaskServices
                 $direction = $validatedData['direction'] ?? 'asc';
                 $query->orderBy($validatedData['orderBy'], $direction);
             })
-            ->when(isset($validatedData['project']), function ($query) use ($validatedData) {
-                $query->where('project_id', $validatedData['project']);
+            ->when(isset($validatedData['project_id']), function ($query) use ($validatedData) {
+                $query->where('project_id', $validatedData['project_id']);
             })
             ->paginate($validatedData['page_length'] ?? 20);
 

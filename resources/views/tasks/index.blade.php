@@ -17,7 +17,9 @@
                             <option value="">All Projects</option>
                             <!-- Add project options dynamically -->
                             @foreach ($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                <option value="{{ $project->id }}"
+                                    {{ request('project_id') == $project->id ? 'selected' : '' }}>{{ $project->name }}
+                                </option>
                             @endforeach
                         </select>
 
@@ -113,6 +115,26 @@
             });
 
 
+            $('#project-filter').on('change', function() {
+                var projectId = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('project_id', projectId);
+                window.location.href = url.toString();
+            });
+
+            $('input[name="order"]').change(function() {
+                var orderBy = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('order_by', orderBy);
+                window.location.href = url.toString();
+            });
+
+            $('#page-length').change(function() {
+                var pageLength = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('page_length', pageLength);
+                window.location.href = url.toString();
+            });
         });
     </script>
 </x-app-layout>
