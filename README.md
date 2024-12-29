@@ -41,5 +41,5 @@ To set up the project, follow these steps:
 
 The log credentials are:
 
--   Username: `your-username`
--   Password: `your-password`
+-   Username: `test@example.com`
+-   Password: `12345678`
