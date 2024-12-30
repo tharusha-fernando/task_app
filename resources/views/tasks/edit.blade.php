@@ -17,6 +17,8 @@
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Task Name</label>
                             <input type="text" name="name" id="name" value="{{ $task->name }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white sm:text-sm">
+                                <x-validation-error :name="'name'"/>
+
                         </div>
                         <div class="mb-4">
                             <label for="project"
@@ -27,6 +29,8 @@
                                     <option value="{{ $project->id }}" {{ $task->project_id == $project->id ? 'selected' : '' }}>{{ $project->name }}</option>
                                 @endforeach
                             </select>
+                            <x-validation-error :name="'project_id'"/>
+
                         </div>
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit"
@@ -41,7 +45,6 @@
     </div>
 </x-app-layout>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#taskForm').on('submit', function(e) {
